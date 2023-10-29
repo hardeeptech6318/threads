@@ -18,6 +18,7 @@ import {
   updateCommunityInfo,
 } from "@/lib/actions/community.actions";
 
+
 // Resource: https://clerk.com/docs/integration/webhooks#supported-events
 // Above document lists the supported events
 type EventType =
@@ -35,7 +36,11 @@ type Event = {
 };
 
 export const POST = async (request: Request) => {
+  console.log('working');
+  
   const payload = await request.json();
+  console.log(payload);
+  
   const header = headers();
 
   const heads = {
@@ -46,6 +51,8 @@ export const POST = async (request: Request) => {
 
   // Activitate Webhook in the Clerk Dashboard.
   // After adding the endpoint, you'll see the secret on the right side.
+  console.log(process.env.NEXT_CLERK_WEBHOOK_SECRET);
+  
   const wh = new Webhook(process.env.NEXT_CLERK_WEBHOOK_SECRET || "");
 
   let evnt: Event | null = null;
@@ -60,6 +67,8 @@ export const POST = async (request: Request) => {
   }
 
   const eventType: EventType = evnt?.type!;
+  console.log(eventType);
+  
 
   // Listen organization creation event
   if (eventType === "organization.created") {
@@ -71,6 +80,12 @@ export const POST = async (request: Request) => {
     try {
 
       console.log('in created');
+      console.log( id,
+        name,
+        slug,
+        logo_url || image_url,
+        "org bio",
+        created_by)
       
       // @ts-ignore
       await createCommunity(
