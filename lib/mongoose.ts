@@ -5,7 +5,7 @@ let isConnected=false;
 
 export const connectToDB=async()=>{
     mongoose.set('strictQuery',true)
-    if(!process.env.MONGODB_URl) return console.log('MONGODB_URL not found')
+    if(!process.env.MONGODB_URL) return console.log('MONGODB_URL not found')
     if(isConnected) return console.log('ALready connected to Mongodb');
     
     try {
